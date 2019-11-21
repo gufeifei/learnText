@@ -27,6 +27,9 @@
     NSLog(@"是否有环：%d",i);
     int value = NodeClass::findLoopBeginNode(headerNode);//查找环的起点
     NSLog(@"环的起点的节点data是：%d",value);
+    ///----链表反转
+    list_single *newHeaderNode = NodeClass::reverseList(headerNode);
+    NodeClass::scanList(newHeaderNode);
 }
 
 //创建一个链表多个节点
@@ -45,7 +48,8 @@
     node3->next = node4;
     node4->next = node5;
     node5->next = node6;
-    node6->next = node4;
+    node6->next = nullptr;
+//    node6->next = node4;
     return headerNode;
 }
 

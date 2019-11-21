@@ -23,5 +23,6 @@ public:
     static void scanList(list_single *headerNode);//遍历简单的单向链表、没有环
     static int isLoopList(list_single *headerNode);//判断是否有环
     static int findLoopBeginNode(list_single *headerNode);//寻找链表环的起始位置
+    static list_single* reverseList(list_single *headerNode);//链表反转
 };
 

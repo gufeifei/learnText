@@ -152,3 +152,18 @@ int NodeClass::findLoopBeginNode(list_single *headerNode) {
     }
     return 0;
 }
+///链表反转
+list_single* NodeClass:: reverseList(list_single *headerNode) {
+    //定义一个新的节点
+    list_single *newNode = creatListNote();
+    //循环节点
+    list_single *p = headerNode;
+    while (p != nullptr) {
+        //保存插入点之后的数据
+        list_single *tempNode = p->next;
+        p->next = newNode->next;
+        newNode->next = p;
+        p = tempNode;
+    }
+    return newNode;
+}
