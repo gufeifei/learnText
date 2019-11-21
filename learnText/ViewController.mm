@@ -7,21 +7,9 @@
 //
 
 #import "ViewController.h"
-#import <AudioToolbox/AudioToolbox.h>
-#import <AVFoundation/AVFoundation.h>
-#import <MediaPlayer/MediaPlayer.h>
-#import <AVKit/AVKit.h>
 #include "Node.hpp"
 
-@interface ViewController ()<AVAudioPlayerDelegate>
-@property(nonatomic, copy) NSString *str;
-@property(nonatomic, strong) MPMoviePlayerController *moviePlayer;
-@property(nonatomic, strong) AVPlayerViewController *avplayer;
-@property(nonatomic, strong) AVPlayer *player;
-
-@property(nonatomic, copy) NSString *aString;
-@property(nonatomic, copy) NSMutableString *aMutableString;
-
+@interface ViewController ()
 @end
 
 
@@ -30,72 +18,36 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    //Thread 1: EXC_BAD_INSTRUCTION (code=EXC_I386_INVOP, subcode=0x0)
-//    dispatch_sync(dispatch_get_main_queue(), ^{
-//        NSLog(@"momo run");
-//    });
-    NodeClass::creatListNote();
-    self.aString = @"aaaaaa";
-    NSLog(@"aString----------%p",self.aString);
-    NSString *a = [self.aString copy];
-    NSLog(@"a----------------%p=====%p",a,&a);
-    NSMutableString *aa = [self.aString mutableCopy];
-    [aa appendFormat:@"cc"];
-    NSLog(@"aa---------------%p=====%p",aa,&aa);
-    self.aMutableString = [[[NSMutableString alloc] initWithString:@"bbbbbb"] mutableCopy];// [NSMutableString stringWithString:@"bbbbbbb"];
-    NSLog(@"aMutableString----%p",self.aMutableString);
-    NSString *aaa = [self.aMutableString copy];//不可变
-    NSLog(@"aaa---------------%p=====%p",aaa,&aaa);
-    
-    NSMutableString *aaaa = [self.aMutableString mutableCopy];//可变的
-    NSLog(@"aaaa--------------%p=====%p",aaaa,&aaaa);
-    NSLog(@"hash====%tu",[aaaa hash]);
-    
-    // Do any additional setup after loading the view.
-//    pthread_t
-//
-//    NSOperation *op = [[NSOperation alloc] init];
-//    [op cancel];
-//    [op isFinished];
-//    op.dependencies;
-//    int i = findSec(@[@1,@2,@3], 3);
-//    NSLog(@"%d",i);
+   
     self.view.backgroundColor = [UIColor redColor];
-    NSString *str = [NSString stringWithFormat:@"%@",@"123"];
-    self.str = str;
-    NSLog(@"%@",str);
+    //---------------单向链表、有无环的相关算法调用----------------------
+    list_single *headerNode = [self creatList];//创建链表
+//    NodeClass::scanList(headerNode);//遍历单向无环链表
+    int i = NodeClass::isLoopList(headerNode);//判断链表是否有环
+    NSLog(@"是否有环：%d",i);
+    int value = NodeClass::findLoopBeginNode(headerNode);//查找环的起点
+    NSLog(@"环的起点的节点data是：%d",value);
 }
 
+//创建一个链表多个节点
+- (list_single *)creatList {
+    list_single *headerNode = NodeClass::creatListNote();
+    list_single *node1 = NodeClass::creatListNote(1);
+    list_single *node2 = NodeClass::creatListNote(2);
+    list_single *node3 = NodeClass::creatListNote(3);
+    list_single *node4 = NodeClass::creatListNote(4);
+    list_single *node5 = NodeClass::creatListNote(5);
+    list_single *node6 = NodeClass::creatListNote(6);
 
-//////AudioToolBox.FrameWork
-//- (void)audioTool {
-//    SystemSoundID soundID = 0;
-//    NSURL *url = [NSURL URLWithString:@""];
-//    AudioServicesCreateSystemSoundID((__bridge CFURLRef)(url), &soundID);
-////    AudioServicesAddSystemSoundCompletion(<#SystemSoundID inSystemSoundID#>, <#CFRunLoopRef  _Nullable inRunLoop#>, <#CFStringRef  _Nullable inRunLoopMode#>, <#AudioServicesSystemSoundCompletionProc  _Nonnull inCompletionRoutine#>, <#void * _Nullable inClientData#>)
-//    AudioServicesPlaySystemSound(soundID);//播放音效
-//    AudioServicesPlayAlertSound(soundID);//播放震动加音效
-//}
-//
-/////AVAudioPlayer
-//- (void)audioPlayer {
-//    NSError *error;
-//    //只支持本地路径
-//    AVAudioPlayer *player = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL URLWithString:@""] error:&error];
-//    BOOL isprepared = [player prepareToPlay];
-//    BOOL isPlay = [player play];
-//    player.delegate = self;
-//}
-//
-//- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
-//    //音频播放完成
-//}
-//- (void)audioPlayerDecodeErrorDidOccur:(AVAudioPlayer *)player error:(NSError *)error {
-//    //音频解码错误
-//}
-//
-//- (void)avPlayer {
-////    self.player addPeriodicTimeObserverForInterval:<#(CMTime)#> queue:<#(nullable dispatch_queue_t)#> usingBlock:<#^(CMTime time)block#>
-//}
+    headerNode->next = node1;
+    node1->next = node2;
+    node2->next = node3;
+    node3->next = node4;
+    node4->next = node5;
+    node5->next = node6;
+    node6->next = node4;
+    return headerNode;
+}
+
 @end
 
